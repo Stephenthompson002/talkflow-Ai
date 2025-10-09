@@ -1,0 +1,23 @@
+{
+  "name": "talkflow-frontend",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "ng serve --host 0.0.0.0",
+    "build": "ng build --configuration production"
+  },
+  "dependencies": {
+    "@angular/animations": "~16.2.0",
+    "@angular/common": "~16.2.0",
+    "@angular/compiler": "~16.2.0",
+    "@angular/core": "~16.2.0",
+    "@angular/forms": "~16.2.0",
+    "@angular/platform-browser": "~16.2.0",
+    "@angular/platform-browser-dynamic": "~16.2.0",
+    "@angular/router": "~16.2.0",
+    "@microsoft/signalr": "^7.0.0"
+  },
+  "devDependencies": {
+    "@angular/cli": "~16.2.0",
+    "typescript": "~5.3.0"
+  }
+}
