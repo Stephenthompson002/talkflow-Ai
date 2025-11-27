@@ -6,7 +6,7 @@ namespace TalkFlow.Api.Models
     {
         [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
-        public Guid ConversationId { get; set; }
+        public Guid ConversationId { get; set; } = Guid.NewGuid(); // FIX: Add default value
         public string Sender { get; set; } = ""; // customer | bot | agent
         public string Content { get; set; } = "";
         public DateTime SentAt { get; set; } = DateTime.UtcNow;

@@ -5,6 +5,10 @@ namespace TalkFlow.Api.Services
     {
         public Task<string> HandleIntentAsync(string text, CancellationToken ct = default)
         {
+            // FIX: Add null check
+            if (string.IsNullOrEmpty(text))
+                return Task.FromResult("(intent-handled) Empty input");
+            
             // Simulate response
             return Task.FromResult($"(intent-handled) Responding to: {text.Substring(0, Math.Min(50, text.Length))}");
         }
