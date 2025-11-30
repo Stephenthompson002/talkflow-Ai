@@ -1,0 +1,86 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths-ignore:
+      - '**/README.md'
+      - '**/README.txt'
+      - '**/*.rst'
+      - 'docs/**'
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - '**/README.md'
+      - '**/README.txt'
+      - '**/*.rst'
+      - 'docs/**'
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+          
+      - name: Restore dependencies
+        run: dotnet restore
+        
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+        
+      - name: Run unit tests
+        run: |
+          cd backend/TalkFlow.Api.Tests.Unit
+          dotnet test --verbosity normal --logger "console;verbosity=detailed"
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+          
+      - name: Restore dependencies
+        run: dotnet restore
+        
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+        
+      - name: Run integration tests
+        run: |
+          cd backend/TalkFlow.Api.Tests.Integration
+          dotnet test --verbosity normal --logger "console;verbosity=detailed"
+
+  test-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+          
+      - name: Install coverlet
+        run: dotnet tool install --global coverlet.console
+          
+      - name: Run tests with coverage
+        run: |
+          coverlet ./backend/TalkFlow.Api.Tests.Unit/bin/Release/net8.0/TalkFlow.Api.Tests.Unit.dll \
+            --target "dotnet" \
+            --targetargs "test ./backend/TalkFlow.Api.Tests.Unit --no-build" \
+            --format opencover \
+            --output "./coverage.xml"
+            
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage.xml
